@@ -1,0 +1,227 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Online Payment</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#050914;
+    color:#fff;
+    min-height:100vh;
+    padding:20px;
+}
+
+.container{
+    max-width:480px;
+    margin:auto;
+}
+
+.card{
+    background:#101827;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 10px 35px rgba(0,0,0,.35);
+}
+
+h1{
+    text-align:center;
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#9ca8ba;
+    margin-bottom:20px;
+}
+
+.timer{
+    text-align:center;
+    background:#261919;
+    border-radius:12px;
+    padding:12px;
+    margin-bottom:20px;
+}
+
+.timer span{
+    color:#ff7676;
+    font-size:25px;
+    font-weight:bold;
+}
+
+.label{
+    display:block;
+    margin:16px 0 7px;
+    color:#cbd5e1;
+    font-weight:bold;
+}
+
+.value{
+    width:100%;
+    padding:15px;
+    background:#07101d;
+    border:1px solid #26354b;
+    border-radius:10px;
+    color:#fff;
+    font-size:18px;
+}
+
+.upi-row{
+    display:flex;
+    gap:8px;
+}
+
+.upi-row .value{
+    flex:1;
+}
+
+.copy{
+    border:0;
+    background:#334155;
+    color:white;
+    border-radius:10px;
+    padding:0 14px;
+    font-weight:bold;
+}
+
+.methods{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:12px;
+}
+
+.method{
+    background:#172235;
+    border:1px solid #2b3a50;
+    border-radius:12px;
+    padding:15px 5px;
+    text-align:center;
+    font-size:13px;
+}
+
+.note{
+    margin-top:20px;
+    color:#9ca8ba;
+    font-size:13px;
+    line-height:1.5;
+    text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="card">
+
+<h1>Online Payment</h1>
+
+<div class="subtitle">
+Secure UPI Payment
+</div>
+
+<div class="timer">
+Payment request expires in<br>
+<span id="timer">10:00</span>
+</div>
+
+<label class="label">Amount</label>
+<div class="value">
+₹ <span id="amount">0</span>
+</div>
+
+<label class="label">UPI ID</label>
+
+<div class="upi-row">
+    <div class="value" id="upi">Not specified</div>
+    <button class="copy" onclick="copyUPI()">📋 Copy</button>
+</div>
+
+<label class="label">Supported UPI Apps</label>
+
+<div class="methods">
+    <div class="method">PhonePe</div>
+    <div class="method">Google Pay</div>
+    <div class="method">Paytm</div>
+</div>
+
+<div class="note">
+Please verify the displayed amount and UPI ID before making any payment.
+</div>
+
+</div>
+</div>
+
+<script>
+
+// URL থেকে Amount ও UPI নেওয়া
+const params = new URLSearchParams(window.location.search);
+
+const amount = params.get("amount");
+const upi = params.get("upi");
+
+// Amount দেখানো
+if(amount){
+    document.getElementById("amount").textContent = amount;
+}
+
+// UPI ID দেখানো
+if(upi){
+    document.getElementById("upi").textContent = upi;
+}
+
+// UPI Copy
+function copyUPI(){
+
+    const upiText = document.getElementById("upi").textContent;
+
+    navigator.clipboard.writeText(upiText).then(function(){
+
+        alert("UPI ID copied");
+
+    });
+
+}
+
+// 10 মিনিটের Timer
+let time = 600;
+
+const timer = setInterval(function(){
+
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+
+    document.getElementById("timer").textContent =
+        String(minutes).padStart(2,"0") + ":" +
+        String(seconds).padStart(2,"0");
+
+    time--;
+
+    if(time < 0){
+
+        clearInterval(timer);
+
+        document.getElementById("timer").textContent =
+            "Expired";
+
+    }
+
+},1000);
+
+</script>
+
+</body>
+</html>
+```
